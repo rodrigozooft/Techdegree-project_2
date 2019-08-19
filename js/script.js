@@ -87,7 +87,45 @@ createPaginationLinks(studentList);
        "invoke" the function 
 ***/
 
+const divHeader = document.querySelector('.page-header');
+const divSearch = document.createElement('div');
+divSearch.className = 'student-search';
+const inputSearch = document.createElement('input');
+const buttonSearch = document.createElement('button');
+buttonSearch.textContent = 'Search';
+inputSearch.placeholder = 'Search for students...';
+divSearch.appendChild(inputSearch);
+divSearch.appendChild(buttonSearch);
+divHeader.appendChild(divSearch);
 
+const searchPerform = (searchInput, names) =>{
+   let counter = 0;
+   let filteredNames = [];
+   console.log(searchInput);
+   console.log(names);
+   for(let i = 0; i < names.length; i++){
+      if(searchInput.value.length !== 0){
+         if(names[i].textContent.toLowerCase()
+         .includes(searchInput.value.toLowerCase())){
+            studentList[i].style.display = 'block';
+            filteredNames.push(studentList[i]);
+         } else{
+            counter += 1;
+            studentList[i].style.display = 'none';
+         }
+
+      }  else {
+         studentList[i].style.display = 'block';
+         filteredNames.push(studentList[i]);
+     } 
+
+     }
+   createPaginationLinks(filteredNames);
+}
+
+buttonSearch.addEventListener('click', () => {
+   searchPerform(inputSearch, studentList);
+});
 
 
 /*** 
