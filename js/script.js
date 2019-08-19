@@ -20,22 +20,26 @@ let studentList = document.querySelector('.student-list').children;
 const itemsToBeDisplayed = 10;
 
 const displayPage = (list, pageNumber) => {
+   for(i = 0; i < list.length; i++){
+      list[i].style.display = 'none';
+   };
    let startIndex = (pageNumber * itemsToBeDisplayed) - itemsToBeDisplayed;
    let endIndex = pageNumber * itemsToBeDisplayed;
    for(let i = 0; i < list.length; i++){
       if(i >= startIndex && i < endIndex){
          list[i].style.display = 'block';
       }
-   }
+   } 
 };
 
 const createPaginationLinks = (list) => {
   let divPage = document.querySelector('.page');
   let divPagination = document.createElement('div');
   divPagination.className = 'pagination';
-  divPage.appendChild(divPagination);
   let ulPagination = document.createElement('ul');
+
   let totalPages = Math.ceil(list.length / itemsToBeDisplayed);
+
   for (let i = 1; i <= totalPages; i++){
    let liPagination = document.createElement('li');
    let aPagination = document.createElement('a');
@@ -43,24 +47,30 @@ const createPaginationLinks = (list) => {
    aPagination.textContent = i;
    liPagination.appendChild(aPagination);
    ulPagination.appendChild(liPagination);
-   if(i = 1){
+
+   if(i === 1){
       aPagination.className = 'active';
    };
-  };
-  let ulList = ulPagination.children;
-  for (i = 0; i < ulList.length; i++){
-   let aElement = ulList[0].children;
-   aElement.addEventListener('click', (e) => {
-      for(i = 0; i <ulPagination.children.length; i++){
-         ulPagination.children[i].firstElementChild.className = ''
+
+   liPagination.addEventListener('click', (e) => {
+      const aElements = document.querySelectorAll('a');
+      const eventTarget = e.target;
+      let numberOfPages = parseInt(e.target.textContent);
+      displayPage(studentList, numberOfPages);
+      for(let i = 0; i < aElements.length; i++){
+         aElements[i].classList.remove('active');
+         if(eventTarget){
+            eventTarget.classList.add('active');
+         }
       }
-      e.target.className = 'Active';
    });
-  };
+  }
+  divPagination.appendChild(ulPagination);
+  divPage.appendChild(divPagination);
 };
 
-createPaginationLinks();
-displayPage(studentList, document.querySelector('.pagination').lastElementChild.firstElementChild.textContent);
+displayPage(studentList, 1);
+createPaginationLinks(studentList);
 
 /*** 
    Create the `showPage` function to hide all of the items in the 
