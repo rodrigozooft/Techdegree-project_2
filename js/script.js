@@ -16,9 +16,51 @@ FSJS project 2 - List Filter and Pagination
    will only be used inside of a function, then it can be locally 
    scoped to that function.
 ***/
+let studentList = document.querySelector('.student-list').children;
+const itemsToBeDisplayed = 10;
 
+const displayPage = (list, pageNumber) => {
+   let startIndex = (pageNumber * itemsToBeDisplayed) - itemsToBeDisplayed;
+   let endIndex = pageNumber * itemsToBeDisplayed;
+   for(let i = 0; i < list.length; i++){
+      if(i >= startIndex && i < endIndex){
+         list[i].style.display = 'block';
+      }
+   }
+};
 
+const createPaginationLinks = (list) => {
+  let divPage = document.querySelector('.page');
+  let divPagination = document.createElement('div');
+  divPagination.className = 'pagination';
+  divPage.appendChild(divPagination);
+  let ulPagination = document.createElement('ul');
+  let totalPages = Math.ceil(list.length / itemsToBeDisplayed);
+  for (let i = 1; i <= totalPages; i++){
+   let liPagination = document.createElement('li');
+   let aPagination = document.createElement('a');
+   aPagination.href = '#';
+   aPagination.textContent = i;
+   liPagination.appendChild(aPagination);
+   ulPagination.appendChild(liPagination);
+   if(i = 1){
+      aPagination.className = 'active';
+   };
+  };
+  let ulList = ulPagination.children;
+  for (i = 0; i < ulList.length; i++){
+   let aElement = ulList[0].children;
+   aElement.addEventListener('click', (e) => {
+      for(i = 0; i <ulPagination.children.length; i++){
+         ulPagination.children[i].firstElementChild.className = ''
+      }
+      e.target.className = 'Active';
+   });
+  };
+};
 
+createPaginationLinks();
+displayPage(studentList, document.querySelector('.pagination').lastElementChild.firstElementChild.textContent);
 
 /*** 
    Create the `showPage` function to hide all of the items in the 
